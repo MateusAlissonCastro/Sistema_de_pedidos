@@ -13,13 +13,55 @@ const syncDB = async () => {
 
 }
 
-//Exibir todos os clientes do banco de dados
+//Exibir todos os clientes
 const showAllClients = async (req, res) => {
     const clientes = await clienteModel.findAll()
     res.json(clientes)
 }
+//Adiciona um cliente
+const createClient = async (req, res) => {
+    await clienteModel.create({
+        nome: req.body.nome,
+        email: req.body.email
+    })
+    res.send('Cliente criado com sucesso!')
+}
+//Busca um cliente
+const findClient = async (req, res) => {
+    const idClient = req.params.id
+    const client = await clienteModel.findByPk(idClient)
+    res.json(client)
+}
+//Atualiza um cliente
+const updateClient = async (req, res) => {
+    const idClient = req.params.id
+    await clienteModel.update({
+        nome: req.body.nome,
+        email: req.body.email
+    }, {
+        where: {
+            id: idClient
+        }
+    })
+    res.send('Cliente atualizado com sucesso!')
+}
+
+//Deleta um cleinte
+const deleteClient = async (req, res) => {
+    const idClient = req.params.id
+    await clienteModel.destroy({
+        where: {
+            id: idClient
+        }
+    })
+    res.send('Cliente apagado com sucesso!')
+}
 
 module.exports = {
     syncDB: syncDB,
-    showAllClients: showAllClients
+    showAllClients: showAllClients,
+    createClient: createClient,
+    findClient: findClient,
+    updateClient: updateClient,
+    deleteClient: deleteClient
 }
